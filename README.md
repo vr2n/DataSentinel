@@ -1,6 +1,6 @@
-# 🚀 DatumSync
+# 🚀 DataSentinel
 
-DatumSync is an intelligent, automated data pipeline platform designed to streamline large-scale data processing with modular support for **Validation**, **Normalization**, **Conversion**, **Prediction**, and **Profiling**. Built with a FastAPI backend, Google Cloud services, and a sleek dashboard UI, DatumSync is your all-in-one solution for seamless data operations.
+DataSentinel is an intelligent, automated data pipeline platform designed to streamline large-scale data processing with modular support for **Validation**, **Normalization**, **Conversion**, **Prediction**, and **Profiling**. Built with a FastAPI backend, Google Cloud services, and a sleek dashboard UI, DatumSync is your all-in-one solution for seamless data operations.
 
 ## 🧠 Why DatumSync?
 
@@ -99,7 +99,7 @@ graph TD;
 
 ## 🧪 Live Demo
 
-> 🌐 **Live URL:** [datumsync.vr2n.com](https://datumsync.vr2n.com)
+> 🌐 **Live URL:** [datasentinel.srslogics.com](https://datasentinel.srslogics.com)
 
 Use Google OAuth to log in and explore all modules. For demo Stripe payments, use:
 
