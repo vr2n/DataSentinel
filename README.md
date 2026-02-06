@@ -1,24 +1,52 @@
-# 🚀 DataSentinel
+# DataSentinel
 
-DataSentinel is an intelligent, automated data pipeline platform designed to streamline large-scale data processing with modular support for **Validation**, **Normalization**, **Conversion**, **Prediction**, and **Profiling**. Built with a FastAPI backend, Google Cloud services, and a sleek dashboard UI, DatumSync is your all-in-one solution for seamless data operations.
+**DataSentinel** is a cloud-native **data quality enforcement platform** that guards data pipelines by validating, cleaning, profiling, converting, and intelligently processing datasets **before they reach analytics or machine learning systems**.
 
-## 🧠 Why DatumSync?
-
-> “A modern enterprise needs more than just pipelines — it needs *intelligence at every step*.”
-
-### ✨ Key Features
-
-* ✅ **Data Validation** — Ensures schema and data integrity between source and target files.
-* 🌀 **Normalization** — Cleans and standardizes raw data into high-quality formats.
-* 🔀 **Conversion** — Converts CSV to Parquet format with cloud-based triggers.
-* 🧠 **Prediction** — Applies machine learning classification to predict outcomes on uploaded data.
-* 🔍 **Profiling** — Auto-generates data reports with summary statistics.
-* 📈 **Interactive Dashboard** — Real-time stats and history of data operations.
-* 💳 **Stripe-powered Subscription** — Upgrade to Pro for unlimited access and premium features.
+Instead of debugging broken dashboards and unreliable models downstream, DataSentinel stops bad data **at the gate**.
 
 ---
 
-## 🛠 Tech Stack
+## Why DataSentinel?
+
+> “Modern enterprises don’t just need pipelines — they need **trust in their data**.”
+
+Most data failures happen **upstream**, caused by:
+- inconsistent schemas
+- missing or malformed values
+- dirty CSV files
+- silent data corruption
+- manual, error-prone fixes
+
+**DataSentinel enforces data correctness before data is consumed**, so analytics, reporting, and ML systems remain reliable.
+
+---
+
+## Core Capabilities
+
+- **Data Validation**  
+  Enforces schema, data types, and required columns. Invalid data is rejected early.
+
+- **Normalization**  
+  Cleans and standardizes raw data into consistent, analytics-ready formats.
+
+- **Conversion**  
+  Converts CSV datasets into Parquet for faster queries and lower storage costs.
+
+- **Profiling**  
+  Auto-generates data reports with summary statistics and distribution insights.
+
+- **Prediction**  
+  Applies machine learning classification as part of the data enforcement flow.
+
+- **Interactive Dashboard**  
+  Clear visibility into what ran, what failed, and why.
+
+- **Stripe Subscriptions**  
+  SaaS-ready billing with Pro-tier access.
+
+---
+
+## Tech Stack
 
 | Category        | Technologies                                                               |
 | --------------- | -------------------------------------------------------------------------- |
@@ -32,72 +60,50 @@ DataSentinel is an intelligent, automated data pipeline platform designed to str
 
 ---
 
-## ⚙️ How It Works
+## Architecture Overview
+
+DataSentinel uses an **event-driven, microservice-based architecture** designed for scalability, fault isolation, and cost efficiency.
+
+Each dataset upload triggers independent services that enforce data quality without cascading failures.
 
 ```mermaid
 graph TD
 
     A[👤 User Uploads File] --> B["📁 GCS Central Bucket (Raw Uploads)"]
     B --> C["📨 Pub/Sub Trigger"]
-    C --> D["⚡ Eventarc (Object Finalized)"]
+    C --> D["⚡ Eventarc"]
 
-    D --> E1["🚀 Cloud Run: Conversion"]
+    D --> E1["🚀 Cloud Run: Validation"]
     D --> E2["🚀 Cloud Run: Normalization"]
-    D --> E3["🚀 Cloud Run: Validation"]
-    D --> E4["🚀 Cloud Run: Prediction"]
-    D --> E5["🚀 Cloud Run: Profiling"]
+    D --> E3["🚀 Cloud Run: Conversion"]
+    D --> E4["🚀 Cloud Run: Profiling"]
+    D --> E5["🚀 Cloud Run: Prediction"]
 
-    subgraph "🧠 Cloud Run Microservices"
-        E1 --> F1["✅ Convert to Parquet"]
-        E2 --> F2["✅ Normalize Columns"]
-        E3 --> F3["✅ Validate Source-Target"]
-        E4 --> F4["✅ Run ML Predictions"]
-        E5 --> F5["✅ Generate Data Profile"]
+    subgraph "🧠 DataSentinel Services"
+        E1 --> F1["Reject / Approve"]
+        E2 --> F2["Clean & Standardize"]
+        E3 --> F3["CSV → Parquet"]
+        E4 --> F4["Generate Reports"]
+        E5 --> F5["Run ML Models"]
     end
 
-    F1 --> G1["📦 GCS User Bucket (Processed Output)"]
-    F2 --> G2
-    F3 --> G3
-    F4 --> G4
-    F5 --> G5
+    F1 --> G["📦 User GCS Bucket (Processed Data)"]
+    F2 --> G
+    F3 --> G
+    F4 --> G
+    F5 --> G
 
-    F1 --> DB["🗃️ Supabase PostgreSQL (Reports Table)"]
+    F1 --> DB["🗃️ Supabase PostgreSQL"]
     F2 --> DB
     F3 --> DB
     F4 --> DB
     F5 --> DB
 
-    DB --> H["📊 FastAPI Dashboard & Reports"]
-    H --> I["🔐 Google OAuth (Authlib)"]
-
+    DB --> H["📊 Dashboard & Reports"]
 
 ```
 
----
-```mermaid
-graph TD;
-    Upload[📤 User Uploads File via UI] --> SaveToDB[(🗃️ Save File Info to PostgreSQL)]
-    Upload --> CentralGCS[(☁️ Store in Central GCS Bucket)]
-
-    SaveToDB --> Router{📌 Based on Selected Module}
-    Router --> Convert[🔁 Conversion Module]
-    Router --> Normalize[🧪 Normalization Module]
-    Router --> Validate[✅ Validation Module]
-    Router --> Predict[🔮 Prediction Module]
-    Router --> Profile[📊 Profiling Module]
-
-    Convert --> UserGCS[(👤 Store in User GCS Bucket)]
-    Normalize --> UserGCS
-    Validate --> UserGCS
-    Predict --> UserGCS
-    Profile --> UserGCS
-
-    UserGCS --> UpdateDB[(🗂️ Update Output Path in PostgreSQL)]
-    UpdateDB --> Dashboard[User Dashboard & Reports]
-
-```
-
-## 🧪 Live Demo
+## Live Demo
 
 > 🌐 **Live URL:** [datasentinel.srslogics.com](https://datasentinel.srslogics.com)
 
@@ -111,7 +117,7 @@ CVC: Any 3 digits
 
 ---
 
-## 🧹 Modules & Routes
+## Modules & Routes
 
 | Module        | Endpoint                                      | Description                       |
 | ------------- | --------------------------------------------- | --------------------------------- |
@@ -126,7 +132,7 @@ CVC: Any 3 digits
 
 ---
 
-## 📦 Setup Instructions
+## Setup Instructions
 
 ```bash
 # 1. Clone the repo
@@ -147,27 +153,29 @@ uvicorn main:app --reload
 
 ---
 
-## ☁️ Deployment
+## Deployment
 
 This project is deployed via:
 
-* 🔧 **Render (App Hosting)**
-* ☁️ **Google Cloud Run (Modular services)**
-* 📎 **Stripe (Billing)**
-* 📃 **Supabase (PostgreSQL DB & auth)**
+* **Google Cloud Run** — Stateless microservices for enforcement modules
+* **Google Cloud Storage** — Raw and processed dataset storage
+* **Pub/Sub + Eventarc** — Event-driven execution
+* **Render** — Hosts main FastAPI app and dashboard
+* **Supabase PostgreSQL** — Job metadata and reports
+* **Stripe** — Subscription billing
 
 ---
-## 🛡️ Uptime & Reliability
+## Uptime & Reliability
 To ensure continuous availability of the application hosted on a free-tier Render instance, a proactive uptime monitoring solution was implemented:
 
-* **🧩 Strategy**
+* **Strategy**
 /health Endpoint
 A lightweight health-check endpoint (GET /health) was added to confirm app readiness and ensure it responds with HTTP 200 OK.
 
-* **🛠️ Uptime Monitoring with UptimeRobot**
+* **Uptime Monitoring with UptimeRobot**
 UptimeRobot is used to ping the /health endpoint every 5 minutes, preventing the service from entering cold-start or sleep mode (a common limitation of free-tier platforms).
 
-* **🧠 Benefit**
+* **Benefit**
 This setup ensures real-time reliability, faster response times, and uninterrupted user experience — all without requiring paid infrastructure.
 ```bash
 @app.get("/health")
@@ -176,16 +184,18 @@ async def health_check():
 ```
 ---
 
-## ✅ What's Unique?
+## Positioning Summary
 
-* **GCP-native triggers:** Event-driven architecture using Pub/Sub and Cloud Run.
-* **Stripe Checkout + Webhooks:** Full billing cycle implemented.
-* **Modular cloud pipeline:** Each stage (e.g., validation, prediction) is its own microservice.
-* **Real-time dashboard with visual analytics.**
+DataSentinel treats data quality as a first-class system concern, not an afterthought.
+
+* Every architectural decision prioritizes
+* correctness over convenience
+* visibility over silent failure
+* trust over throughput
 
 ---
 
-## 📌 Google-readiness Highlights
+## Google-readiness Highlights
 
 * Full-stack GCP + Python + FastAPI implementation
 * Clean modular microservice architecture
@@ -196,7 +206,7 @@ async def health_check():
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Shubham Singh**
 MSc Data Science, University of Nottingham
